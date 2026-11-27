@@ -1,4 +1,4 @@
-package com.itsupport1;
+package com.itsupport;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
