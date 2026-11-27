@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create New Ticket — Support</title>
+  <style>
+    /* =========================================
+       Theme Variables & Global Reset
+       ========================================= */
+    :root {
+      --primary: #5b3df5;
+      --primary-hover: #492be0;
+      --accent-pink: #ec1d79;
+      --bg-outer: #f5f5f7;
+      --bg-app: #f8f9fc;
+      --bg-card: #ffffff;
+      --bg-field: #f3f4f6;
+      --text-main: #1e1b4b;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-outer);
+      color: var(--text-main);
+      padding: 18px;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================
+       Outer App Window & Grid Layout
+       ========================================= */
+    .app-shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: var(--bg-app);
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      grid-template-rows: 56px 1fr;
+      grid-template-areas:
+        "logo topbar"
+        "sidebar workspace";
+    }
+
+    /* =========================================
+       Top-Left Brand Cell & Top Utility Header
+       ========================================= */
+    .brand-cell {
+      grid-area: logo;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topbar {
+      grid-area: topbar;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      font-size: 12.5px;
+      color: var(--text-main);
+      outline: none;
+      width: 100%;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .lang-select {
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .top-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fde68a;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* =========================================
+       Left Icon Sidebar
+       ========================================= */
+    .sidebar {
+      grid-area: sidebar;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0 12px;
+    }
+
+    .back-link {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+
+    .nav-rail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .rail-btn {
+      width: 42px;
+      height: 38px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      font-size: 14px;
+    }
+
+    .rail-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .rail-dot {
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-pink);
+    }
+
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .online-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fed7aa;
+      color: #9a3412;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .online-avatar::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      border: 2px solid #ffffff;
+    }
+
+    /* =========================================
+       Main Workspace Area
+       ========================================= */
+    .workspace {
+      grid-area: workspace;
+      padding: 18px 24px 24px;
+    }
+
+    .breadcrumb-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .breadcrumb {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb .current {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .outline-btn {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 6px;
+      border: 1px solid var(--primary);
+      background: #ffffff;
+      color: var(--primary);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-pill {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      cursor: pointer;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .page-title-row h1 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .page-title-row a {
+      font-size: 11.5px;
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Two-Column Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #eef0f6;
+    }
+
+    /* =========================================
+       Left Column: Ticket Form & Editor
+       ========================================= */
+    .section-heading {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .req {
+      color: #ef4444;
+    }
+
+    /* Department Selector Buttons */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .dept-btn {
+      height: 38px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .dept-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .form-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+      margin-bottom: 18px;
+    }
+
+    .sub-label {
+      display: block;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .filled-input {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      background: var(--bg-field);
+      font-size: 12px;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    /* Rich Text Editor Box */
+    .editor-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .editor-body {
+      padding: 12px 14px;
+      min-height: 92px;
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      outline: none;
+    }
+
+    /* Bottom Form Actions */
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 4px;
+    }
+
+    .back-dash-link {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .footer-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-cancel {
+      height: 34px;
+      padding: 0 16px;
+      border-radius: 6px;
+      border: 1px solid var(--primary);
+      background: #ffffff;
+      color: var(--primary);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-create {
+      height: 34px;
+      padding: 0 16px;
+      border-radius: 6px;
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* =========================================
+       Right Column: Uploader, Progress & Support
+       ========================================= */
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dropzone {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 22px 16px 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .upload-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #eef2ff;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .dropzone-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .dropzone-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .dropzone-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .source-icons {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .fab-pink {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent-pink);
+      color: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Active File Upload Card */
+    .upload-progress-card {
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid #eef0f6;
+    }
+
+    .upload-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .file-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-thumb {
+      width: 34px;
+      height: 28px;
+      border-radius: 5px;
+      background: #e0e7ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .file-name {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .file-size {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+
+    .progress-bar-fill {
+      width: 85%;
+      height: 100%;
+      background: var(--primary);
+    }
+
+    .progress-caption {
+      font-size: 9.5px;
+      color: var(--text-muted);
+    }
+
+    /* Attached Thumbnails */
+    .files-grid {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .thumb-tile {
+      width: 68px;
+      height: 54px;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .thumb-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(17, 24, 39, 0.75);
+      color: #ffffff;
+      font-size: 9px;
+      cursor: pointer;
+    }
+
+    /* Quick Support Callout Card */
+    .quick-support-card {
+      background: linear-gradient(120deg, #5b3df5 0%, #7c3aed 100%);
+      border-radius: 12px;
+      padding: 16px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .quick-support-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .quick-support-card p {
+      font-size: 10px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 10px;
+    }
+
+    .connect-btn {
+      background: var(--accent-pink);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* =========================================
+       Responsive Breakpoints
+       ========================================= */
+    @media (max-width: 980px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .dept-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "topbar"
+          "workspace";
+      }
+      .brand-cell,
+      .sidebar {
+        display: none;
+      }
+      .form-two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Application Shell -->
+  <div class="app-shell">
+
+    <!-- Top-Left Brand Mark -->
+    <div class="brand-cell" aria-hidden="true">
+      <span style="font-size: 20px;">🥭</span>
+    </div>
+
+    <!-- Top Navigation & Global Search -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button type="button" class="menu-toggle" aria-label="Toggle menu">☰</button>
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" placeholder="Search User, Events and more.." />
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <select class="lang-select" aria-label="Language">
+          <option selected>English</option>
+          <option>Spanish</option>
+          <option>French</option>
+        </select>
+        <span title="Settings">⚙</span>
+        <span title="Notifications">🔔</span>
+        <span class="top-avatar">A</span>
+      </div>
+    </header>
+
+    <!-- Left Vertical Icon Rail -->
+    <aside class="sidebar">
+      <div>
+        <a href="#" class="back-link">&lt; Back</a>
+        <nav class="nav-rail" aria-label="Primary navigation">
+          <button type="button" class="rail-btn" title="Home">🏠</button>
+          <button type="button" class="rail-btn" title="Departments">🏢</button>
+          <button type="button" class="rail-btn" title="Billing">💲</button>
+          <button type="button" class="rail-btn" title="Messages">✉</button>
+          <button type="button" class="rail-btn" title="Tickets">📄</button>
+          <button type="button" class="rail-btn" title="Schedule">📅</button>
+          <button type="button" class="rail-btn active" title="Support">
+            🎧
+            <span class="rail-dot"></span>
+          </button>
+          <button type="button" class="rail-btn" title="Settings">⚙</button>
+          <button type="button" class="rail-btn" title="Users">👤</button>
+        </nav>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="online-avatar">N</div>
+        <span>Natalie</span>
+      </div>
+    </aside>
+
+    <!-- Main Ticket Creation Workspace -->
+    <main class="workspace">
+
+      <!-- Breadcrumb & Import/Export Toolbar -->
+      <div class="breadcrumb-bar">
+        <div class="breadcrumb">
+          Home / Support / <span class="current">Tickets</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" class="outline-btn">⬇ Import</button>
+          <button type="button" class="outline-btn">⬆ Export</button>
+          <select class="category-pill" aria-label="Filter category">
+            <option>Category</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Page Heading -->
+      <div class="page-title-row">
+        <h1>Create New Ticket</h1>
+        <a href="#">Create New Ticket</a>
+      </div>
+
+      <!-- Two-Column Form & Attachment Grid -->
+      <div class="content-grid">
+
+        <!-- Left Column: Ticket Details Form -->
+        <section class="card">
+          <h2 class="section-heading">Ticket Details</h2>
+
+          <!-- Category / Department Selector -->
+          <span class="field-label">Category/Department <span class="req">*</span></span>
+          <div class="dept-grid" role="group" aria-label="Category or Department">
+            <button type="button" class="dept-btn" onclick="selectDept(this)">HRD</button>
+            <button type="button" class="dept-btn" onclick="selectDept(this)">Finance</button>
+            <button type="button" class="dept-btn active" onclick="selectDept(this)">IT</button>
+            <button type="button" class="dept-btn" onclick="selectDept(this)">Admin</button>
+          </div>
+
+          <!-- Ticket Metadata Inputs -->
+          <h2 class="section-heading">Ticket Details <span class="req">*</span></h2>
+          <form action="#" method="post">
+            <div class="form-two-col">
+              <div>
+                <label class="sub-label" for="ticket-name">Ticket Name</label>
+                <input id="ticket-name" class="filled-input" type="text" value="System Issue" />
+              </div>
+              <div>
+                <label class="sub-label" for="ticket-number">Ticket Number</label>
+                <input id="ticket-number" class="filled-input" type="text" value="#ST081" />
+              </div>
+              <div>
+                <label class="sub-label" for="ticket-status">Ticket Status</label>
+                <input id="ticket-status" class="filled-input" type="text" value="System Issue and need software" />
+              </div>
+              <div>
+                <label class="sub-label" for="ticket-priority">Priority</label>
+                <input id="ticket-priority" class="filled-input" type="text" value="High" />
+              </div>
+            </div>
+
+            <!-- Rich Text Message Editor -->
+            <span class="field-label">Message <span class="req">*</span></span>
+            <div class="editor-box">
+              <div class="editor-toolbar">
+                <span>↶</span>
+                <span>↷</span>
+                <span>Normal text ▾</span>
+                <span>≡ ▾</span>
+                <span>■ ▾</span>
+                <strong>B</strong>
+                <em>I</em>
+                <u>U</u>
+                <span>S</span>
+                <span>&lt;&gt;</span>
+                <span>:≡</span>
+                <span>1≡</span>
+                <span>@</span>
+                <span>🖼</span>
+                <span>&lt;/&gt;</span>
+                <span>“</span>
+                <span>—</span>
+              </div>
+              <div class="editor-body" contenteditable="true">
+                Enter detailed description of the system issue, steps to reproduce, and any relevant error messages or software requirements.
+              </div>
+            </div>
+
+            <!-- Form Footer Actions -->
+            <div class="form-footer">
+              <a href="#" class="back-dash-link">&lt; Back to Dashboard</a>
+              <div class="footer-buttons">
+                <button type="button" class="btn-cancel">Cancel Ticket</button>
+                <button type="submit" class="btn-create">Create Ticket</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- Right Column: File Uploads & Quick Support -->
+        <aside class="right-stack">
+
+          <!-- Drag & Drop Upload Box -->
+          <div class="card">
+            <div class="dropzone">
+              <div class="upload-badge">☁</div>
+              <div class="dropzone-title">Drag &amp; Drop files here to upload</div>
+              <div class="dropzone-sub">Browse Files</div>
+              <div class="dropzone-footer">
+                <div class="source-icons">
+                  <span title="Google Drive">🔺</span>
+                  <span title="Dropbox">📦</span>
+                </div>
+                <button type="button" class="fab-pink" title="Add attachment">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Upload Progress Card -->
+          <div class="upload-progress-card">
+            <div class="upload-row">
+              <div class="file-meta">
+                <span class="file-thumb">🖼</span>
+                <div>
+                  <div class="file-name">System-Issue.png • 12KB</div>
+                </div>
+              </div>
+              <span style="font-size: 11px; color: #6b7280;">⏸ ✕</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill"></div>
+            </div>
+            <div class="progress-caption">85% • 10 Secs Remaining</div>
+          </div>
+
+          <!-- Attached Files Grid -->
+          <div class="card">
+            <span class="field-label">Files</span>
+            <div class="files-grid">
+              <div class="thumb-tile" style="background: #fbcfe8;">
+                <span>📁</span>
+                <button type="button" class="thumb-remove" aria-label="Remove file">✕</button>
+              </div>
+              <div class="thumb-tile" style="background: #dbeafe;">
+                <span>🖥</span>
+                <button type="button" class="thumb-remove" aria-label="Remove file">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Support Banner -->
+          <div class="quick-support-card">
+            <div>
+              <h3>Quick Support</h3>
+              <p>Need immediate assistance with an urgent ticket? Connect directly with our support specialist.</p>
+              <button type="button" class="connect-btn">Connect Call</button>
+            </div>
+            <span style="font-size: 36px;" aria-hidden="true">👩‍💻</span>
+          </div>
+
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Department Button Selection Script -->
+  <script>
+    function selectDept(clickedBtn) {
+      document.querySelectorAll(".dept-btn").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      clickedBtn.classList.add("active");
+    }
+  </script>
+</body>
+</html>

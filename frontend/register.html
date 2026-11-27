@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sellora — Create an Account</title>
+  <style>
+    /* =========================================
+       Theme Variables & Global Reset
+       ========================================= */
+    :root {
+      --primary: #3b42f6;
+      --primary-hover: #2d34e0;
+      --primary-dark: #252bc9;
+      --text-dark: #111827;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --border: #e5e7eb;
+      --bg-page: #eceef2;
+      --bg-card: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================
+       Main Split Container
+       ========================================= */
+    .auth-container {
+      width: 100%;
+      max-width: 1180px;
+      min-height: 740px;
+      background: var(--bg-card);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+      display: flex;
+      overflow: hidden;
+      padding: 18px;
+    }
+
+    /* =========================================
+       Left Column: Registration Form & Footer
+       ========================================= */
+    .left-panel {
+      flex: 1;
+      padding: 24px 44px 20px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 370px;
+      margin: 24px auto;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .input-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input {
+      width: 100%;
+      height: 42px;
+      padding: 0 38px 0 14px;
+      font-size: 13.5px;
+      color: var(--text-dark);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 66, 246, 0.12);
+    }
+
+    /* Password visibility toggle button */
+    .toggle-eye {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+    }
+
+    .toggle-eye:hover {
+      color: var(--text-muted);
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 44px;
+      margin-top: 8px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Horizontal divider with centered label */
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 22px 0 18px;
+      font-size: 11.5px;
+      color: var(--text-light);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .divider span {
+      padding: 0 12px;
+    }
+
+    /* Social sign-up buttons (Google & Apple) */
+    .social-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .social-btn {
+      height: 42px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .social-btn:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    .signin-prompt {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .signin-prompt a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .signin-prompt a:hover {
+      text-decoration: underline;
+    }
+
+    .left-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-light);
+      padding-top: 12px;
+    }
+
+    .left-footer a {
+      color: var(--text-light);
+      text-decoration: none;
+    }
+
+    .left-footer a:hover {
+      color: var(--text-muted);
+    }
+
+    /* =========================================
+       Right Column: CRM Showcase & Widgets
+       ========================================= */
+    .right-panel {
+      flex: 0 0 51%;
+      background: linear-gradient(145deg, #3f46f7 0%, #343be6 55%, #282fd4 100%);
+      border-radius: 16px;
+      padding: 56px 44px 44px 48px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative translucent block in background */
+    .right-panel::before {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 340px;
+      height: 440px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 40px;
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      max-width: 440px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-copy h2 {
+      font-size: 31px;
+      font-weight: 600;
+      line-height: 1.24;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .hero-copy p {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Dashboard Preview Wrapper */
+    .dashboard-preview {
+      position: relative;
+      margin-top: 32px;
+      z-index: 1;
+    }
+
+    .dashboard-window {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.24);
+      color: var(--text-dark);
+      width: 90%;
+    }
+
+    .dash-top-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr 0.75fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dash-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border-radius: 9px;
+      padding: 11px 12px;
+      border: 1px solid #eef2f6;
+    }
+
+    .kpi-card.primary-kpi {
+      background: linear-gradient(135deg, #4349f8, #353ce0);
+      color: #ffffff;
+      border: none;
+    }
+
+    .kpi-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      opacity: 0.78;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .kpi-trend {
+      font-size: 8px;
+      opacity: 0.85;
+    }
+
+    .kpi-trend.green {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .chart-card {
+      background: #ffffff;
+      border-radius: 9px;
+      padding: 11px 12px;
+      border: 1px solid #eef2f6;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mini-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 6px;
+      height: 78px;
+      padding-top: 8px;
+    }
+
+    .mini-bars span {
+      width: 12px;
+      border-radius: 4px;
+      background: #e2e8f0;
+    }
+
+    .mini-bars span.active {
+      background: var(--primary);
+      height: 68px;
+    }
+
+    /* Product Transaction Table Mock */
+    .table-card {
+      background: #ffffff;
+      border-radius: 9px;
+      padding: 11px 12px;
+      border: 1px solid #eef2f6;
+    }
+
+    .table-title {
+      font-size: 9px;
+      font-weight: 700;
+      margin-bottom: 6x;
+      color: #1e293b;
+    }
+
+    .mock-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1.6fr 1fr 0.7fr 0.8fr;
+      align-items: center;
+      padding: 5px 0;
+      border-top: 1px solid #f1f5f9;
+      font-size: 7.5px;
+      color: #64748b;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 99px;
+      font-size: 7px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .pill-green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .pill-amber {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    /* Floating Sales Categories Gauge Card */
+    .floating-donut-card {
+      position: absolute;
+      right: -14px;
+      top: 52px;
+      width: 185px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.2);
+      color: var(--text-dark);
+    }
+
+    .donut-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .donut-badge {
+      font-size: 7.5px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    .gauge-wrap {
+      position: relative;
+      text-align: center;
+      margin: 4px 0 8px;
+    }
+
+    .gauge-center {
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      right: 0;
+    }
+
+    .gauge-center span {
+      display: block;
+      font-size: 7.5px;
+      color: var(--text-light);
+    }
+
+    .gauge-center strong {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .legend-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 7.5px;
+      color: var(--text-muted);
+    }
+
+    .legend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    /* =========================================
+       Responsive Breakpoints
+       ========================================= */
+    @media (max-width: 960px) {
+      .auth-container {
+        flex-direction: column;
+        padding: 12px;
+      }
+
+      .left-panel {
+        padding: 24px 20px;
+      }
+
+      .right-panel {
+        flex: none;
+        padding: 36px 24px;
+      }
+
+      .dashboard-window {
+        width: 100%;
+      }
+
+      .floating-donut-card {
+        position: static;
+        width: 100%;
+        margin-top: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Split Auth Wrapper -->
+  <div class="auth-container">
+
+    <!-- Left Column: Account Registration Form -->
+    <section class="left-panel">
+      <!-- Brand Logo -->
+      <a href="#" class="brand-logo">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <rect x="11" y="2" width="6" height="7" rx="3" fill="currentColor" />
+            <rect x="11" y="19" width="6" height="7" rx="3" fill="currentColor" />
+            <rect x="2" y="11" width="7" height="6" rx="3" fill="currentColor" />
+            <rect x="19" y="11" width="7" height="6" rx="3" fill="currentColor" />
+            <rect x="4.8" y="4.8" width="6" height="6" rx="3" fill="currentColor" opacity="0.7" />
+            <rect x="17.2" y="17.2" width="6" height="6" rx="3" fill="currentColor" opacity="0.7" />
+            <rect x="17.2" y="4.8" width="6" height="6" rx="3" fill="currentColor" opacity="0.7" />
+            <rect x="4.8" y="17.2" width="6" height="6" rx="3" fill="currentColor" opacity="0.7" />
+          </svg>
+        </span>
+        <span>Sellora</span>
+      </a>
+
+      <!-- Form Content -->
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h1>Create an Account</h1>
+          <p>Join now to streamline your experience from day one.</p>
+        </div>
+
+        <!-- Registration Fields -->
+        <form action="#" method="post">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <div class="input-box">
+              <input id="name" name="name" type="text" value="Roger Gerrard" placeholder="Full name" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-box">
+              <input id="email" name="email" type="email" value="sellostore@company.com" placeholder="you@company.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-box">
+              <input id="password" name="password" type="text" value="5ellostore." required />
+              <button type="button" class="toggle-eye" aria-label="Toggle password visibility" onclick="toggleField('password')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <div class="input-box">
+              <input id="confirm-password" name="confirm_password" type="text" value="5ellostore." required />
+              <button type="button" class="toggle-eye" aria-label="Toggle confirm password visibility" onclick="toggleField('confirm-password')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Register</button>
+        </form>
+
+        <!-- OAuth Alternatives -->
+        <div class="divider"><span>Or Register With</span></div>
+
+        <div class="social-row">
+          <button type="button" class="social-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+              <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+              <path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 7.4C.6 9.3 0 11.6 0 14s.6 4.7 1.6 6.6l3.7-2.8z"/>
+              <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.4 7.4 23 12 23z"/>
+            </svg>
+            <span>Google</span>
+          </button>
+
+          <button type="button" class="social-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+            </svg>
+            <span>Apple</span>
+          </button>
+        </div>
+
+        <p class="signin-prompt">
+          Already Have An Account? <a href="#">Sign In.</a>
+        </p>
+      </div>
+
+      <!-- Copyright & Legal Links -->
+      <footer class="left-footer">
+        <span>Copyright © 2025 Sellora Enterprises LTD.</span>
+        <a href="#">Privacy Policy</a>
+      </footer>
+    </section>
+
+    <!-- Right Column: CRM Dashboard Preview -->
+    <section class="right-panel">
+      <!-- Value Proposition Headline -->
+      <div class="hero-copy">
+        <h2>Effortlessly manage your team and operations.</h2>
+        <p>Log in to access your CRM dashboard and manage your team.</p>
+      </div>
+
+      <!-- Dashboard UI Mockup -->
+      <div class="dashboard-preview">
+        <div class="dashboard-window">
+          <!-- Top KPI & Chart Cards -->
+          <div class="dash-top-grid">
+            <div class="dash-stack">
+              <div class="kpi-card primary-kpi">
+                <div class="kpi-label">Total Sales</div>
+                <div class="kpi-value">$189,374</div>
+                <div class="kpi-trend">+12.4% vs last month</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">Total Profit</div>
+                <div class="kpi-value">$25,684</div>
+                <div class="kpi-trend green">+8.2% vs last month</div>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div>
+                <div class="kpi-label">Chat Performance</div>
+                <div class="kpi-value">00:01:30</div>
+              </div>
+              <svg viewBox="0 0 180 56" width="100%" height="56" fill="none">
+                <defs>
+                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#3b42f6" stop-opacity="0.22" />
+                    <stop offset="100%" stop-color="#3b42f6" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M0 42 Q25 18, 45 30 T90 24 T135 32 T180 12 L180 56 L0 56 Z" fill="url(#areaGrad)" />
+                <path d="M0 42 Q25 18, 45 30 T90 24 T135 32 T180 12" stroke="#3b42f6" stroke-width="2" fill="none" />
+              </svg>
+            </div>
+
+            <div class="chart-card">
+              <div class="kpi-label">Sales Overview</div>
+              <div class="mini-bars">
+                <span style="height: 36px;"></span>
+                <span class="active"></span>
+                <span style="height: 48px;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Transactions List -->
+          <div class="table-card">
+            <div class="table-title">Product Transaction</div>
+            <div class="mock-row">
+              <span>#ORD-0041</span>
+              <span>Apple Pixel Watch SE</span>
+              <span>12 Feb, 2025</span>
+              <span>$349</span>
+              <span><span class="status-pill pill-green">Completed</span></span>
+            </div>
+            <div class="mock-row">
+              <span>#ORD-0042</span>
+              <span>Apple iPhone 15 Pro</span>
+              <span>13 Feb, 2025</span>
+              <span>$999</span>
+              <span><span class="status-pill pill-amber">Pending</span></span>
+            </div>
+            <div class="mock-row">
+              <span>#ORD-0043</span>
+              <span>Apple MacBook Air M3</span>
+              <span>14 Feb, 2025</span>
+              <span>$1,299</span>
+              <span><span class="status-pill pill-green">Completed</span></span>
+            </div>
+            <div class="mock-row">
+              <span>#ORD-0044</span>
+              <span>Apple AirPods Pro 2</span>
+              <span>15 Feb, 2025</span>
+              <span>$249</span>
+              <span><span class="status-pill pill-green">Completed</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Sales Categories Donut Card -->
+        <div class="floating-donut-card">
+          <div class="donut-header">
+            <span>Sales Categories</span>
+            <span class="donut-badge">Monthly</span>
+          </div>
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 140 80" width="100%" height="78">
+              <path d="M 16 70 A 54 54 0 0 1 124 70" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round" />
+              <path d="M 16 70 A 54 54 0 0 1 102 26" fill="none" stroke="#3b42f6" stroke-width="14" stroke-linecap="round" />
+              <path d="M 105 29 A 54 54 0 0 1 124 70" fill="none" stroke="#93c5fd" stroke-width="14" stroke-linecap="round" />
+            </svg>
+            <div class="gauge-center">
+              <span>Total Sales</span>
+              <strong>6,248 Units</strong>
+            </div>
+          </div>
+          <div class="legend-list">
+            <div class="legend-row">
+              <span><i class="dot" style="background:#3b42f6;"></i>Electronics</span>
+              <strong>3,840</strong>
+            </div>
+            <div class="legend-row">
+              <span><i class="dot" style="background:#6366f1;"></i>Laptops &amp; PC</span>
+              <strong>1,520</strong>
+            </div>
+            <div class="legend-row">
+              <span><i class="dot" style="background:#93c5fd;"></i>Accessories</span>
+              <strong>888</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Interactive Password Visibility Script -->
+  <script>
+    /**
+     * Toggles an input field between plain text and masked password mode.
+     * @param {string} id - The DOM element ID of the target input.
+     */
+    function toggleField(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>
